@@ -1,0 +1,22 @@
+{
+  "name": "imperivm-conquerors-war-ledger",
+  "version": "1.0.0",
+  "description": "A historic conqueror-themed interactive to-do list & tactical campaign manager.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "todo",
+    "productivity",
+    "history",
+    "conquerors",
+    "napoleon",
+    "alexander",
+    "caesar",
+    "hannibal",
+    "genghis-khan"
+  ],
+  "author": "Antigravity Pair Programmer",
+  "license": "MIT"
+}

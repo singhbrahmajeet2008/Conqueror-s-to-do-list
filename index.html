@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en" data-commander="napoleon">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IMPERIVM — Academy of Conquerors</title>
+  <meta name="description" content="A calm, professional historic conqueror classroom productivity platform with live mutual leaderboards, character selection, and assignment tracking." />
+  
+  <!-- Google Fonts: Classical Cinzel + Modern Crisp Inter & Garamond -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Ambient Atmospheric Subtlety -->
+  <div class="ambient-backdrop" aria-hidden="true">
+    <div class="ambient-glow" id="ambientGlow"></div>
+    <div class="ambient-grid"></div>
+  </div>
+
+  <div class="app-layout">
+    
+    <!-- TOP NAVIGATION & COMMAND BAR -->
+    <header class="top-nav">
+      <div class="nav-container">
+        <!-- Brand & Academy Crest -->
+        <div class="nav-brand">
+          <div class="brand-insignia" id="brandInsignia">⚔️</div>
+          <div class="brand-meta">
+            <span class="brand-eyebrow">ACADEMY OF HISTORIC CONQUERORS</span>
+            <h1 class="brand-title">IMPERIVM</h1>
+          </div>
+        </div>
+
+        <!-- Mode Segmented Control: Student vs Admin -->
+        <div class="mode-switch-control" role="group" aria-label="Portal Mode">
+          <button class="mode-tab-btn active" id="modeStudentBtn" data-mode="student">
+            <span class="mode-icon">⚔️</span>
+            <span>Student Command</span>
+          </button>
+          <button class="mode-tab-btn" id="modeAdminBtn" data-mode="admin">
+            <span class="mode-icon">🏛️</span>
+            <span>Grand Marshal (Admin)</span>
+            <span class="lock-indicator" title="Passkey Protected">🔒</span>
+          </button>
+        </div>
+
+        <!-- Active Student Profile Widget -->
+        <div class="student-profile-widget" id="studentProfileWidget">
+          <div class="profile-avatar-wrap">
+            <img src="assets/napoleon.jpg" alt="Conqueror Portrait" id="widgetAvatarImg" class="profile-avatar-img" />
+            <span class="profile-status-indicator" title="Connected to Live Cohort"></span>
+          </div>
+          <div class="profile-details">
+            <div class="profile-name-row">
+              <span class="student-name" id="widgetStudentName">Cadet Jean-Luc</span>
+              <span class="conqueror-tag" id="widgetConquerorTag">Napoleon</span>
+            </div>
+            <div class="profile-stats-row">
+              <span class="glory-pts-badge" id="widgetGloryPoints">
+                <span class="pts-spark">⚡</span> <span id="widgetGloryPointsNum">0</span> CP
+              </span>
+              <span class="rank-badge" id="widgetRankTitle">Cadet</span>
+            </div>
+          </div>
+          <button class="btn-clean btn-switch-user" id="openSwitchUserBtn" title="Register or switch to another cadet account">
+            ⇄ Switch Cadet
+          </button>
+        </div>
+
+        <!-- System Utilities -->
+        <div class="nav-utilities">
+          <button class="util-btn" id="sfxToggleBtn" title="Toggle Sound FX (Blade clash, brass fanfare)">
+            <span id="sfxIcon">🔊</span>
+            <span class="util-label">Audio</span>
+          </button>
+          <button class="util-btn" id="ambientToggleBtn" title="Toggle Campfire & War Room Atmosphere">
+            <span id="ambientIcon">🔥</span>
+            <span class="util-label">Campfire</span>
+          </button>
+          <button class="util-btn" id="shortcutsBtn" title="Keyboard Shortcuts [?]">
+            <span>⌨️</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- MAIN APP CONTAINER -->
+    <main class="main-content" id="mainContent">
+
+      <!-- ================================================================= -->
+      <!-- VIEW 1: STUDENT COMMAND VIEW                                      -->
+      <!-- ================================================================= -->
+      <div class="view-panel" id="studentViewPanel">
+        
+        <!-- Commander Banner & Character Intel -->
+        <section class="character-spotlight" id="characterSpotlight">
+          <div class="spotlight-frame">
+            <div class="spotlight-portrait-box">
+              <img src="assets/napoleon.jpg" alt="Active Character" id="spotlightPortraitImg" />
+              <div class="spotlight-laurel-badge" id="spotlightBadge">Napoleon</div>
+            </div>
+
+            <div class="spotlight-text-content">
+              <div class="spotlight-eyebrow-row">
+                <span class="spotlight-realm-title" id="spotlightRealmTitle">The Grand Army Cohort</span>
+                <span class="cohort-sync-tag">
+                  <span class="pulse-dot"></span> Live Cohort Sync Active
+                </span>
+              </div>
+              <h2 class="spotlight-heading" id="spotlightHeading">Napoleon Bonaparte</h2>
+              <blockquote class="spotlight-quote" id="spotlightQuote">
+                “Impossible is a word to be found only in the dictionary of fools.”
+              </blockquote>
+
+              <!-- Key Metrics Bar -->
+              <div class="student-metric-strip">
+                <div class="metric-item">
+                  <span class="metric-label">Glory Score</span>
+                  <span class="metric-val text-gold" id="metricGloryScore">0 CP</span>
+                </div>
+                <div class="metric-item">
+                  <span class="metric-label">Remaining Assignments</span>
+                  <span class="metric-val text-gold" id="metricRemainingClass">0 Left</span>
+                </div>
+                <div class="metric-item">
+                  <span class="metric-label">Remaining Directives</span>
+                  <span class="metric-val text-white" id="metricRemainingPersonal">0 Left</span>
+                </div>
+                <div class="metric-item">
+                  <span class="metric-label">Cohort Standing</span>
+                  <span class="metric-val text-gold" id="metricLeaderboardRank">#1 of 5</span>
+                </div>
+                <div class="metric-item">
+                  <span class="metric-label">Conquest Streak</span>
+                  <span class="metric-val text-white" id="metricStreak">7 Days</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Quick Action: Next Conquest Directive -->
+            <div class="spotlight-action-box">
+              <span class="siege-box-subtitle">TACTICAL VANGUARD</span>
+              <h3 class="siege-box-title" id="spotlightNextTitle">Next Campaign Goal</h3>
+              <p class="siege-box-desc" id="spotlightNextDesc">Advance your standing on the cohort leaderboard by conquering assignments.</p>
+              <button class="btn-action-primary" id="spotlightConquerBtn">
+                <span>⚡</span> Jump to Next Mission
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- SPLIT WORKSPACE: ASSIGNMENTS FEED (LEFT) + LIVE LEADERBOARD (RIGHT) -->
+        <div class="workspace-grid">
+          
+          <!-- LEFT COLUMN: ASSIGNMENT FEED -->
+          <div class="feed-column">
+            
+            <!-- Feed Tabs: Class Assignments vs Personal Directives -->
+            <div class="feed-header-bar">
+              <div class="feed-tabs" role="tablist">
+                <button class="feed-tab active" id="tabClassAssignments" data-tab="class">
+                  <span class="tab-icon">🏛️</span>
+                  <span>Class Assignments</span>
+                  <span class="tab-count-badge" id="classAssignmentsCount">0</span>
+                </button>
+                <button class="feed-tab" id="tabPersonalDirectives" data-tab="personal">
+                  <span class="tab-icon">📜</span>
+                  <span>Personal Directives</span>
+                  <span class="tab-count-badge" id="personalDirectivesCount">0</span>
+                </button>
+              </div>
+
+              <!-- Filter / Action Trigger -->
+              <div class="feed-controls-right">
+                <button class="btn-subtle" id="proclaimPersonalBtn" title="Create your own study directive">
+                  + New Personal Directive
+                </button>
+              </div>
+            </div>
+
+            <!-- Filter & Search Toolbar -->
+            <div class="filter-toolbar">
+              <!-- Search Field -->
+              <div class="search-box">
+                <span class="search-glyph">🔍</span>
+                <input type="text" id="assignmentSearchInput" placeholder="Filter assignments, subjects, keywords..." aria-label="Search assignments" />
+                <button class="search-clear" id="searchClearBtn" hidden aria-label="Clear search">✕</button>
+              </div>
+
+              <!-- Subject / Class Filter -->
+              <div class="filter-select-wrap">
+                <select id="subjectFilter" class="filter-select" aria-label="Filter by subject">
+                  <option value="all">All Academic Subjects</option>
+                  <option value="beee">⚡ BEEE</option>
+                  <option value="spa">💻 SPA</option>
+                  <option value="pmd">📐 PMD</option>
+                  <option value="comm">🗣️ Communication Skills</option>
+                  <option value="maths1">∫ Maths 1</option>
+                  <option value="maths2">∬ Maths 2</option>
+                  <option value="iks">📜 IKS</option>
+                </select>
+              </div>
+
+              <!-- Completion Status Filter -->
+              <div class="filter-select-wrap">
+                <select id="completionStatusFilter" class="filter-select" aria-label="Filter by completion status">
+                  <option value="all">All Assignments</option>
+                  <option value="pending" selected>⚔️ Pending Action</option>
+                  <option value="completed">👑 Completed & Conquered</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Assignments Container -->
+            <div class="assignments-list-container">
+              <ul class="assignments-feed" id="assignmentsFeed">
+                <!-- Dynamically populated assignment cards -->
+              </ul>
+
+              <!-- Empty State -->
+              <div class="feed-empty-state" id="feedEmptyState" hidden>
+                <div class="empty-icon">⚜️</div>
+                <h3 class="empty-title">All Assignments Conquered</h3>
+                <p class="empty-desc">Your cohort ledger is clear. Stand proud, Commander, or create a personal training directive.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGHT COLUMN: LIVE MUTUAL LEADERBOARD -->
+          <aside class="leaderboard-column" aria-label="Live Cohort Leaderboard">
+            <div class="leaderboard-panel">
+              <div class="leaderboard-header">
+                <div class="lb-title-group">
+                  <span class="lb-eyebrow">COHORT RANKINGS</span>
+                  <h3 class="lb-title">Honor Roll of Imperators</h3>
+                </div>
+                <div class="lb-live-pill" title="Synchronized across cohort tabs">
+                  <span class="pulse-dot"></span> LIVE
+                </div>
+              </div>
+
+              <!-- Top 3 Classical Podium -->
+              <div class="podium-grid" id="podiumGrid">
+                <!-- Dynamically populated top 3 (#2 Left, #1 Center Gold, #3 Right) -->
+              </div>
+
+              <!-- Full Cohort Ranking Table -->
+              <div class="cohort-table-wrapper">
+                <table class="cohort-table">
+                  <thead>
+                    <tr>
+                      <th class="th-rank">Rank</th>
+                      <th class="th-student">Cadet & Character</th>
+                      <th class="th-done">Tasks</th>
+                      <th class="th-points">Points</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cohortTableBody">
+                    <!-- Dynamically populated roster rows -->
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Leaderboard Footer Note -->
+              <div class="leaderboard-footer">
+                <span>Points are awarded instantly upon assignment verification.</span>
+              </div>
+            </div>
+          </aside>
+
+        </div>
+      </div>
+
+      <!-- ================================================================= -->
+      <!-- VIEW 2: GRAND MARSHAL (ADMIN CONSOLE) VIEW                        -->
+      <!-- ================================================================= -->
+      <div class="view-panel" id="adminViewPanel" hidden>
+        
+        <div class="admin-dashboard-header">
+          <div class="admin-title-wrap">
+            <span class="admin-tag">INSTRUCTOR & GRAND MARSHAL PORTAL</span>
+            <h2 class="admin-title">Classroom Assignment Publisher</h2>
+            <p class="admin-subtitle">Decree course assignments, assign Glory Points, and inspect cohort submissions.</p>
+          </div>
+          <div class="admin-actions-bar">
+            <button class="btn-action-primary" id="openNewAssignmentModalBtn">
+              <span>📜</span> Proclaim New Class Assignment
+            </button>
+            <button class="btn-clean" id="adminResetAllDataBtn" title="Reset all points, completions and tasks" style="border-color: #ef4444; color: #ef4444;">
+              <span>🗑️</span> Reset Ledger & Points
+            </button>
+            <button class="btn-clean" id="lockAdminConsoleBtn" title="Lock the Admin Console immediately">
+              <span>🔒</span> Lock Console
+            </button>
+            <button class="btn-clean" id="switchBackToStudentBtn">
+              Back to Student View
+            </button>
+          </div>
+        </div>
+
+        <div class="admin-grid">
+          
+          <!-- Published Assignments Manager (Left) -->
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <h3 class="admin-card-title">Active Course Assignments</h3>
+              <span class="badge-subtle" id="adminActiveCount">0 Active</span>
+            </div>
+            <div class="admin-assignments-list" id="adminAssignmentsList">
+              <!-- Admin list of assignments with edit, delete, and submission count -->
+            </div>
+          </div>
+
+          <!-- Cohort Overview & Student Matrix (Right) -->
+          <div class="admin-card">
+            <div class="admin-card-header">
+              <h3 class="admin-card-title">Enrolled Students & Progress</h3>
+              <button class="btn-subtle" id="adminResetRosterBtn" title="Reset cohort scores or add students">
+                Reset Demo Scores
+              </button>
+            </div>
+            <div class="admin-students-roster" id="adminStudentsRoster">
+              <!-- Enrolled students list with completion rates -->
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="app-footer">
+      <div class="footer-container">
+        <div class="footer-quote">
+          <span>“Perseverance is the virtue of the victorious.” — Alexander & Napoleon</span>
+        </div>
+        <p class="footer-sub">IMPERIVM Classroom Gamification Engine • Built for rigorous academic conquest.</p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL 1: STUDENT ENLISTMENT & CHARACTER SELECTION                     -->
+  <!-- ===================================================================== -->
+  <div class="modal-scrim" id="enlistModal" hidden role="dialog" aria-modal="true" aria-labelledby="enlistTitle">
+    <div class="modal-dialog enlist-dialog">
+      <div class="modal-card">
+        <div class="enlist-header">
+          <div class="enlist-icon">🏛️</div>
+          <h2 class="enlist-title" id="enlistTitle">Enter the Imperial Academy</h2>
+          <p class="enlist-desc">Choose your historical conqueror persona and register your cadet name for the classroom leaderboard.</p>
+        </div>
+
+        <!-- Google Sign-In Option -->
+        <div class="google-auth-box">
+          <button type="button" class="btn-google-sign-in" id="googleSignInBtn" title="Sign in with your Google Account">
+            <svg class="google-svg-icon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+            </svg>
+            <span>Sign in with Google</span>
+          </button>
+          <div class="auth-divider-line">
+            <span>or enlist as Cadet with custom credentials</span>
+          </div>
+        </div>
+
+        <form id="enlistForm" class="enlist-form">
+          <!-- Student Name & Cohort Row -->
+          <div class="form-row-2">
+            <div class="form-field">
+              <label for="enlistNameInput" class="field-label">Student Cadet Name</label>
+              <input type="text" id="enlistNameInput" class="field-input" placeholder="e.g., Alex Vance / Marcus" required />
+            </div>
+            <div class="form-field">
+              <label for="enlistCohortSelect" class="field-label">Class / Cohort</label>
+              <select id="enlistCohortSelect" class="field-select">
+                <option value="alpha">Legion Alpha — Class of 2026</option>
+                <option value="honors">Imperial Honors Academy</option>
+                <option value="praetorian">Praetorian Study Group</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Character Persona Cards -->
+          <div class="character-select-section">
+            <label class="field-label">Select Your Conqueror Persona (Exclusive: 1 Cadet per Conqueror)</label>
+            <div class="character-rule-notice">
+              <span>⚔️ In this cohort, each conqueror can only be pledged by <strong>one cadet</strong> at a time. Once chosen, your avatar is <strong>permanently bound</strong>!</span>
+            </div>
+            <div class="enlist-error-banner" id="enlistErrorBanner" hidden></div>
+            <div class="character-cards-grid" id="characterSelectGrid">
+              
+              <!-- 1. Napoleon -->
+              <div class="character-card active" data-cmd="napoleon">
+                <div class="char-portrait-frame">
+                  <img src="assets/napoleon.jpg" alt="Napoleon Bonaparte" />
+                </div>
+                <div class="char-meta">
+                  <h4 class="char-name">Napoleon</h4>
+                  <span class="char-title">Emperor of the French</span>
+                  <p class="char-virtue">⚡ Precision & Strategic Calculation</p>
+                </div>
+              </div>
+
+              <!-- 2. Alexander -->
+              <div class="character-card" data-cmd="alexander">
+                <div class="char-portrait-frame">
+                  <img src="assets/alexander.jpg" alt="Alexander the Great" />
+                </div>
+                <div class="char-meta">
+                  <h4 class="char-name">Alexander</h4>
+                  <span class="char-title">Basileus of Macedon</span>
+                  <p class="char-virtue">☀️ Audacity & Unstoppable Will</p>
+                </div>
+              </div>
+
+              <!-- 3. Caesar -->
+              <div class="character-card" data-cmd="caesar">
+                <div class="char-portrait-frame">
+                  <img src="assets/caesar.jpg" alt="Julius Caesar" />
+                </div>
+                <div class="char-meta">
+                  <h4 class="char-name">Julius Caesar</h4>
+                  <span class="char-title">Dictator Perpetuo</span>
+                  <p class="char-virtue">🏛️ Oratory & Decisive Action</p>
+                </div>
+              </div>
+
+              <!-- 4. Augustus Caesar -->
+              <div class="character-card" data-cmd="augustus">
+                <div class="char-portrait-frame">
+                  <img src="assets/augustus.jpg" alt="Augustus Caesar" />
+                </div>
+                <div class="char-meta">
+                  <h4 class="char-name">Augustus</h4>
+                  <span class="char-title">First Roman Emperor</span>
+                  <p class="char-virtue">🦅 Pax Romana & Golden Age</p>
+                </div>
+              </div>
+
+              <!-- 5. Qin Shi Huang -->
+              <div class="character-card" data-cmd="qin">
+                <div class="char-portrait-frame">
+                  <img src="assets/qin.jpg" alt="Qin Shi Huang" />
+                </div>
+                <div class="char-meta">
+                  <h4 class="char-name">Qin Shi Huang</h4>
+                  <span class="char-title">First Emperor of China</span>
+                  <p class="char-virtue">🐉 Legalism & Great Wall Unifier</p>
+                </div>
+              </div>
+
+              <!-- 6. Hannibal -->
+              <div class="character-card" data-cmd="hannibal">
+                <div class="char-portrait-frame">
+                  <img src="assets/hannibal.jpg" alt="Hannibal Barca" />
+                </div>
+                <div class="char-meta">
+                  <h4 class="char-name">Hannibal</h4>
+                  <span class="char-title">Lion of Carthage</span>
+                  <p class="char-virtue">🐘 Tactical Ingenuity & Grit</p>
+                </div>
+              </div>
+
+              <!-- 7. Genghis Khan -->
+              <div class="character-card" data-cmd="genghis">
+                <div class="char-portrait-frame">
+                  <img src="assets/genghis.jpg" alt="Genghis Khan" />
+                </div>
+                <div class="char-meta">
+                  <h4 class="char-name">Genghis Khan</h4>
+                  <span class="char-title">Universal Khagan</span>
+                  <p class="char-virtue">🏹 Iron Discipline & Focus</p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Form Submit -->
+          <div class="modal-footer">
+            <button type="button" class="btn-clean" id="closeEnlistBtn" hidden>Cancel</button>
+            <button type="submit" class="btn-action-primary btn-large">
+              <span>⚔️</span> Enlist & Enter Cohort
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL 2: ADMIN NEW CLASS ASSIGNMENT PUBLISHER                         -->
+  <!-- ===================================================================== -->
+  <div class="modal-scrim" id="adminAssignmentModal" hidden role="dialog" aria-modal="true" aria-labelledby="adminModalTitle">
+    <div class="modal-dialog">
+      <div class="modal-card">
+        <div class="modal-card-header">
+          <div class="modal-crest">📜</div>
+          <h2 class="modal-title" id="adminModalTitle">Decree Course Assignment</h2>
+          <button class="modal-close" id="closeAdminModalBtn">✕</button>
+        </div>
+
+        <form id="adminAssignmentForm" class="modal-form">
+          <input type="hidden" id="adminAssignmentId" />
+
+          <div class="form-field">
+            <label for="adminAssignTitle" class="field-label">Assignment Title *</label>
+            <input type="text" id="adminAssignTitle" class="field-input" placeholder="e.g., AP Calculus: Optimization & Derivative Problem Set" required />
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-field">
+              <label for="adminAssignSubject" class="field-label">Academic Subject</label>
+              <select id="adminAssignSubject" class="field-select">
+                <option value="beee" selected>⚡ BEEE (Basic Electrical & Electronics)</option>
+                <option value="spa">💻 SPA (Structured Programming Approach)</option>
+                <option value="pmd">📐 PMD (Principles of Management & Design)</option>
+                <option value="comm">🗣️ Communication Skills</option>
+                <option value="maths1">∫ Maths 1 (Engineering Mathematics I)</option>
+                <option value="maths2">∬ Maths 2 (Engineering Mathematics II)</option>
+                <option value="iks">📜 IKS (Indian Knowledge Systems)</option>
+              </select>
+            </div>
+
+            <div class="form-field">
+              <label for="adminAssignPoints" class="field-label">Custom Glory Points (CP Reward)</label>
+              <div class="custom-points-row">
+                <input type="number" id="adminAssignPoints" class="field-input" min="1" max="10000" step="5" value="100" placeholder="e.g. 100, 150, 250" required />
+                <span class="points-unit-tag">CP</span>
+              </div>
+              <div class="quick-points-chips" id="quickPointsChips">
+                <button type="button" class="btn-chip chip-pts" data-pts="50">50 CP</button>
+                <button type="button" class="btn-chip chip-pts active" data-pts="100">100 CP</button>
+                <button type="button" class="btn-chip chip-pts" data-pts="150">150 CP</button>
+                <button type="button" class="btn-chip chip-pts" data-pts="200">200 CP</button>
+                <button type="button" class="btn-chip chip-pts" data-pts="300">300 CP</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-field">
+              <label for="adminAssignDueDate" class="field-label">Due Date (Hour of Strike)</label>
+              <input type="date" id="adminAssignDueDate" class="field-input" required />
+            </div>
+            <div class="form-field">
+              <label for="adminAssignDueTime" class="field-label">Due Time (Optional)</label>
+              <input type="time" id="adminAssignDueTime" class="field-input" value="23:59" />
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label for="adminAssignInstructions" class="field-label">Instructions & Victory Criteria</label>
+            <textarea id="adminAssignInstructions" class="field-textarea" rows="3" placeholder="Specify textbook problem numbers, submission format, rubrics, and references..."></textarea>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn-clean" id="cancelAdminModalBtn">Cancel</button>
+            <button type="submit" class="btn-action-primary">
+              <span>🏛️</span> Publish to Cohort Feed
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL 3: PERSONAL DIRECTIVE CREATOR (STUDENT'S OWN TASKS)             -->
+  <!-- ===================================================================== -->
+  <div class="modal-scrim" id="personalDirectiveModal" hidden role="dialog" aria-modal="true" aria-labelledby="personalModalTitle">
+    <div class="modal-dialog">
+      <div class="modal-card">
+        <div class="modal-card-header">
+          <div class="modal-crest">⚔️</div>
+          <h2 class="modal-title" id="personalModalTitle">New Personal Study Directive</h2>
+          <button class="modal-close" id="closePersonalModalBtn">✕</button>
+        </div>
+
+        <form id="personalDirectiveForm" class="modal-form">
+          <input type="hidden" id="personalDirectiveId" />
+
+          <div class="form-field">
+            <label for="personalTitle" class="field-label">Directive Objective *</label>
+            <input type="text" id="personalTitle" class="field-input" placeholder="e.g., Review Chemistry Chapter 4 flashcards" required />
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-field">
+              <label for="personalSubject" class="field-label">Academic Subject</label>
+              <select id="personalSubject" class="field-select">
+                <option value="beee">⚡ BEEE</option>
+                <option value="spa">💻 SPA</option>
+                <option value="pmd">📐 PMD</option>
+                <option value="comm">🗣️ Communication Skills</option>
+                <option value="maths1">∫ Maths 1</option>
+                <option value="maths2">∬ Maths 2</option>
+                <option value="iks">📜 IKS</option>
+                <option value="general" selected>⚔️ General / Self-Study</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label for="personalDueDate" class="field-label">Target Date</label>
+              <input type="date" id="personalDueDate" class="field-input" />
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label for="personalNotes" class="field-label">Notes & Resources</label>
+            <textarea id="personalNotes" class="field-textarea" rows="2" placeholder="Key focus areas, page numbers, links..."></textarea>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn-clean" id="cancelPersonalModalBtn">Cancel</button>
+            <button type="submit" class="btn-action-primary">Save Directive</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- ===================================================================== -->
+  <!-- MODAL: GRAND MARSHAL ADMIN PASSKEY CLEARANCE                          -->
+  <!-- ===================================================================== -->
+  <div class="modal-scrim" id="adminPasskeyModal" hidden role="dialog" aria-modal="true" aria-labelledby="passkeyTitle">
+    <div class="modal-dialog" style="max-width: 440px;">
+      <div class="modal-card passkey-card">
+        <button class="modal-close" id="closePasskeyModalBtn">✕</button>
+        <div class="passkey-header">
+          <div class="passkey-shield-icon">🛡️</div>
+          <span class="passkey-eyebrow">RESTRICTED COMMAND AREA</span>
+          <h2 class="passkey-title" id="passkeyTitle">Imperial Passkey Clearance</h2>
+          <p class="passkey-desc">
+            Grand Marshal assignment administration is restricted. Enter your instructor passkey to proceed.
+          </p>
+        </div>
+
+        <form id="adminPasskeyForm" class="passkey-form">
+          <div class="form-field">
+            <label for="adminPasskeyInput" class="field-label">Instructor Passkey</label>
+            <div class="passkey-input-wrap">
+              <input type="password" id="adminPasskeyInput" class="field-input" placeholder="Enter instructor passkey" required autocomplete="current-password" />
+              <button type="button" class="btn-toggle-visibility" id="togglePasskeyVisibilityBtn" title="Show/Hide passkey">👁️</button>
+            </div>
+          </div>
+
+          <div class="passkey-error-banner" id="passkeyErrorBanner" hidden>
+            ⚠️ Access Denied: Unrecognized Imperial Passkey.
+          </div>
+
+          <div class="modal-footer" style="justify-content: stretch; gap: 0.75rem;">
+            <button type="button" class="btn-clean" id="cancelPasskeyBtn" style="flex: 1;">Cancel</button>
+            <button type="submit" class="btn-action-primary" style="flex: 1; justify-content: center;">
+              <span>🔓</span> Verify & Unlock
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL: GOOGLE ACCOUNT CHOOSER DIALOG                                  -->
+  <!-- ===================================================================== -->
+  <div class="modal-scrim" id="googleAuthModal" hidden role="dialog" aria-modal="true" aria-labelledby="googleModalTitle">
+    <div class="modal-dialog" style="max-width: 450px;">
+      <div class="modal-card google-modal-card">
+        <button class="modal-close" id="closeGoogleAuthBtn">✕</button>
+        <div class="google-modal-header">
+          <svg class="google-svg-icon" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+          </svg>
+          <h2 class="google-modal-title" id="googleModalTitle">Sign in with Google</h2>
+          <p class="google-modal-subtitle">Choose an account to continue to IMPERIVM Academy</p>
+        </div>
+
+        <div class="google-accounts-list" id="googleAccountsList">
+          <div class="google-account-item" data-email="cadet.alex@gmail.com" data-name="Alex Vance">
+            <div class="google-acc-avatar">A</div>
+            <div class="google-acc-meta">
+              <span class="google-acc-name">Alex Vance</span>
+              <span class="google-acc-email">cadet.alex@gmail.com</span>
+            </div>
+          </div>
+          <div class="google-account-item" data-email="marcus.caesar@gmail.com" data-name="Marcus Aurelius">
+            <div class="google-acc-avatar" style="background: #8b263e;">M</div>
+            <div class="google-acc-meta">
+              <span class="google-acc-name">Marcus Aurelius</span>
+              <span class="google-acc-email">marcus.caesar@gmail.com</span>
+            </div>
+          </div>
+          <div class="google-account-item" data-email="sophie.bonaparte@gmail.com" data-name="Sophie Dubois">
+            <div class="google-acc-avatar" style="background: #2563eb;">S</div>
+            <div class="google-acc-meta">
+              <span class="google-acc-name">Sophie Dubois</span>
+              <span class="google-acc-email">sophie.bonaparte@gmail.com</span>
+            </div>
+          </div>
+        </div>
+
+        <form id="customGoogleForm" class="custom-google-form">
+          <div class="form-field">
+            <label class="field-label" for="customGoogleEmail">Or use another Google Account</label>
+            <input type="email" id="customGoogleEmail" class="field-input" placeholder="student@gmail.com" />
+          </div>
+          <button type="submit" class="btn-action-primary" style="width: 100%; justify-content: center; margin-top: 0.5rem;">
+            Sign in with this Email
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- KEYBOARD SHORTCUTS REFERENCE MODAL -->
+  <div class="modal-scrim" id="shortcutsModal" hidden role="dialog" aria-modal="true">
+    <div class="modal-dialog" style="max-width: 480px;">
+      <div class="modal-card">
+        <div class="modal-card-header">
+          <div class="modal-crest">⌨️</div>
+          <h2 class="modal-title">Keyboard Shortcuts</h2>
+          <button class="modal-close" id="closeShortcutsBtn">✕</button>
+        </div>
+        <div class="shortcuts-list">
+          <div class="sc-item"><kbd>/</kbd> <span>Search Assignments & Directives</span></div>
+          <div class="sc-item"><kbd>A</kbd> <span>Toggle Grand Marshal Admin Mode</span></div>
+          <div class="sc-item"><kbd>M</kbd> <span>Toggle Audio Sound FX</span></div>
+          <div class="sc-item"><kbd>Esc</kbd> <span>Close Any Open Window</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL: IMPERIAL RANK PROMOTION & TRIUMPH POPUP                       -->
+  <!-- ===================================================================== -->
+  <div class="modal-scrim" id="promotionModal" hidden role="dialog" aria-modal="true" aria-labelledby="promotionTitle">
+    <div class="modal-dialog" style="max-width: 440px;">
+      <div class="modal-card promotion-card">
+        <button class="modal-close" id="closePromotionBtn">✕</button>
+        <div class="promotion-trophy-icon">🏆</div>
+        <span class="promotion-eyebrow">IMPERIAL TRIUMPH & ADVANCEMENT</span>
+        <h2 class="promotion-title" id="promotionTitle">Rank Promoted!</h2>
+        <div class="promotion-rank-badge" id="promotionRankBadge">Centurion</div>
+        <p class="promotion-desc" id="promotionDesc">
+          Your strategic conquests in class have elevated your standing across the Academy.
+        </p>
+        <div class="promotion-points-earned" id="promotionPointsEarned">+150 CP Awarded</div>
+        <button class="btn-action-primary btn-large" id="claimPromotionBtn" style="justify-content: center; margin-top: 1.25rem;">
+          <span>👑</span> Claim Honor & Continue March
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!-- MODAL: RECONFIRM CONQUERED TASK DIALOG                                -->
+  <!-- ===================================================================== -->
+  <div class="modal-scrim" id="confirmConquerModal" hidden role="dialog" aria-modal="true" aria-labelledby="confirmConquerTitle">
+    <div class="modal-dialog" style="max-width: 480px;">
+      <div class="modal-card confirm-conquer-card">
+        <button class="modal-close" id="closeConfirmConquerBtn">✕</button>
+        <div class="confirm-conquer-header">
+          <div class="confirm-conquer-icon">⚔️</div>
+          <span class="confirm-conquer-eyebrow">VICTORY VERIFICATION</span>
+          <h2 class="confirm-conquer-title" id="confirmConquerTitle">Reconfirm Task Conquest</h2>
+          <p class="confirm-conquer-desc">
+            Please reconfirm whether this strategic task is officially finished:
+          </p>
+        </div>
+
+        <div class="confirm-task-preview-box">
+          <div class="preview-badge-row">
+            <span class="badge-subject" id="confirmTaskSubject">⚡ BEEE</span>
+            <span class="badge-points" id="confirmTaskPointsBadge">⚡ +100 CP</span>
+          </div>
+          <h3 class="preview-task-title" id="confirmTaskTitle">Assignment Title</h3>
+          <p class="preview-task-question">
+            Has this directive been completed according to victorious standards?
+          </p>
+          <div class="preview-reward-notice" id="confirmTaskRewardNotice">
+            👑 Upon your reconfirmation, <strong>+100 Glory Points</strong> will be credited to your cadet account immediately!
+          </div>
+        </div>
+
+        <div class="modal-footer" style="justify-content: stretch; gap: 0.75rem; margin-top: 1.25rem;">
+          <button type="button" class="btn-clean" id="cancelConfirmConquerBtn" style="flex: 1;">Not Yet (Cancel)</button>
+          <button type="button" class="btn-action-primary" id="executeConfirmConquerBtn" style="flex: 1.2; justify-content: center;">
+            <span>⚔️</span> Yes, Task is Conquered!
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div class="app-toast" id="appToast" hidden role="status" aria-live="polite">
+    <div class="toast-wax-seal">⚜️</div>
+    <div class="toast-text" id="toastMessage">Directive Completed</div>
+  </div>
+
+  <!-- VICTORY CANVAS CONFETTI -->
+  <canvas class="victory-canvas" id="victoryCanvas" aria-hidden="true"></canvas>
+
+  <script src="app.js"></script>
+</body>
+</html>
